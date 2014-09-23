@@ -21,9 +21,14 @@
 
   #target {
     right: 0;
+    overflow: auto;
   }
 
-  textarea, #output {
+  #frontMatter {
+    background: #eee;
+  }
+
+  textarea {
     position: absolute;
     top: 5px; bottom: 5px; left: 5px; right: 5px;
     margin: 0; padding: 0;
@@ -39,6 +44,7 @@
 </div>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/js-yaml/3.0.2/js-yaml.min.js"></script>
 
@@ -47,6 +53,7 @@
   'use strict';
   var $source = $('#source');
   var $textarea = $('textarea');
+  var $frontMatter = $('#frontMatter');
   var $output = $('#output');
   var text = '';
 
@@ -76,7 +83,25 @@
   }
 
   function showFrontMatter(src) {
-    console.log(jsyaml.load(src));
+    try {
+      var data = jsyaml.load(src)
+    }
+    catch(e) {
+      $frontMatter.text('parse error: ' + e);
+      return
+    }
+
+    if(_.isObject(data)) {
+      var $table = $('<table>');
+      _.forEach(data, function(v, k) {
+        var $tr = $('<tr>').append($('<th>').text(k), $('<td>').text(v))
+        $table.append($tr);
+      });
+      $frontMatter.empty().append($table);
+    }
+    else {
+      $frontMatter.html('');
+    }
   }
 
   function layout() {
