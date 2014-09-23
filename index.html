@@ -72,7 +72,6 @@
       if(chunks.length > 2 && chunks[0].trim() == '') {
         showFrontMatter(chunks[1]);
         mdText = chunks.slice(2).join('\n---\n');
-        console.log([chunks[1], mdText]);
       }
       else {
         mdText = text;
