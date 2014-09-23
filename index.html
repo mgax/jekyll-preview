@@ -2,8 +2,40 @@
 
 <body>
 
-<textarea></textarea>
-<div id="preview"></div>
+<style>
+  html, body {
+    margin: 0;
+    height: 100%;
+  }
+
+  #source, #target {
+    position: absolute;
+    width: 50%;
+    top: 0;
+    bottom: 0;
+  }
+
+  #source {
+    left: 0;
+  }
+
+  #target {
+    right: 0;
+  }
+
+  textarea, #output {
+    position: absolute;
+    top: 5px; bottom: 5px; left: 5px; right: 5px;
+    margin: 0; padding: 0;
+  }
+</style>
+
+<div id="source">
+  <textarea></textarea>
+</div>
+<div id="target">
+  <div id="output"></div>
+</div>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
@@ -11,9 +43,13 @@
 <script>
 (function() {
   'use strict';
+  var $source = $('#source');
   var $textarea = $('textarea');
-  var $preview = $('#preview');
+  var $output = $('#output');
   var text = '';
+
+  layout();
+  $(window).resize(layout);
 
   setInterval(refresh, 500);
 
@@ -21,8 +57,12 @@
     var newText = $textarea.val()
     if(newText != text) {
       text = newText;
-      $preview.html(marked(text));
+      $output.html(marked(text));
     }
+  }
+
+  function layout() {
+    $textarea.css('width', $source.width() - 10);
   }
 })();
 </script>
