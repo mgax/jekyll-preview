@@ -51,6 +51,9 @@
   var text = '';
 
   var editor = ace.edit('source');
+  editor.getSession().setMode('ace/mode/markdown');
+  editor.setTheme('ace/theme/tomorrow_night_eighties');
+  editor.setShowInvisibles(true);
 
   setInterval(refresh, 500);
 
