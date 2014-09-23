@@ -34,11 +34,13 @@
   <textarea></textarea>
 </div>
 <div id="target">
+  <div id="frontMatter"></div>
   <div id="output"></div>
 </div>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/js-yaml/3.0.2/js-yaml.min.js"></script>
 
 <script>
 (function() {
@@ -55,10 +57,25 @@
 
   function refresh() {
     var newText = $textarea.val()
+    var mdText = '';
     if(newText != text) {
       text = newText;
-      $output.html(marked(text));
+
+      var m = text.match(/^---\n(.*)\n---\n(.*)$/)
+      if(m) {
+        showFrontMatter(m[1]);
+        mdText = m[2];
+      }
+      else {
+        mdText = text;
+      }
+
+      $output.html(marked(mdText));
     }
+  }
+
+  function showFrontMatter(src) {
+    console.log(jsyaml.load(src));
   }
 
   function layout() {
