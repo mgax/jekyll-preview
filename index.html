@@ -57,14 +57,15 @@
 
   function refresh() {
     var newText = $textarea.val()
-    var mdText = '';
+    var mdText;
     if(newText != text) {
       text = newText;
 
-      var m = text.match(/^---\n(.*)\n---\n(.*)$/)
-      if(m) {
-        showFrontMatter(m[1]);
-        mdText = m[2];
+      var chunks = text.split(/^---$/m);
+      if(chunks.length > 2 && chunks[0].trim() == '') {
+        showFrontMatter(chunks[1]);
+        mdText = chunks.slice(2).join('\n---\n');
+        console.log([chunks[1], mdText]);
       }
       else {
         mdText = text;
